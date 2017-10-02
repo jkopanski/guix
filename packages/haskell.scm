@@ -3354,3 +3354,64 @@
     (description
       "Happy is a parser generator for Haskell.  Given a grammar specification in BNF, Happy generates Haskell code to parse the grammar.  Happy works in a similar way to the @yacc@ tool for C.")
     (license bsd-2)))
+
+(define-public ghc-prettyprinter
+  (package
+    (name "ghc-prettyprinter")
+    (version "1.1.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+              "https://hackage.haskell.org/package/prettyprinter/prettyprinter-"
+              version
+              ".tar.gz"))
+        (sha256
+          (base32
+            "1kzfgwpsg3br3dkvqjhldv1bjqw7k8sg3xqinkk3c1219pk2xcx0"))))
+    (build-system haskell-build-system)
+    (inputs
+      `(("ghc-text" ,ghc-text)
+        ("ghc-semigroups" ,ghc-semigroups)
+        ("ghc-doctest" ,ghc-doctest)
+        ("ghc-pgp-wordlist" ,ghc-pgp-wordlist)
+        ("ghc-tasty" ,ghc-tasty)
+        ("ghc-tasty-hunit" ,ghc-tasty-hunit)
+        ("ghc-tasty-quickcheck" ,ghc-tasty-quickcheck)))
+    (home-page
+      "http://github.com/quchen/prettyprinter")
+    (synopsis
+      "A modern, easy to use, well-documented, extensible prettyprinter.")
+    (description "See README.md")
+    (license bsd-2)))
+
+(define-public ghc-pgp-wordlist
+  (package
+    (name "ghc-pgp-wordlist")
+    (version "0.1.0.2")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+              "https://hackage.haskell.org/package/pgp-wordlist/pgp-wordlist-"
+              version
+              ".tar.gz"))
+        (sha256
+          (base32
+            "0ri4m4a18kmnpw2a3vcw7zgjagccqr3snw2qgljg3b92abl6z2z2"))))
+    (build-system haskell-build-system)
+    (inputs
+      `(("ghc-text" ,ghc-text)
+        ("ghc-vector" ,ghc-vector)
+        ("ghc-hunit" ,ghc-hunit)
+        ("ghc-tasty" ,ghc-tasty)
+        ("ghc-tasty-hunit" ,ghc-tasty-hunit)
+        ("ghc-tasty-quickcheck" ,ghc-tasty-quickcheck)
+        ("ghc-doctest" ,ghc-doctest)))
+    (home-page
+      "https://github.com/quchen/pgp-wordlist")
+    (synopsis
+      "Translate between binary data and a human-readable collection of words.")
+    (description
+      "Translate between binary data and a human-readable collection of words. . The PGP Word List consists of two phonetic alphabets, each with one word per possible byte value. A string of bytes is translated with these alphabets, alternating between them at each byte. . The PGP words corresponding to the bytes @5B 1D CA 6E@ are \"erase breakaway spellbind headwaters\", for example. . For further information, see <http://en.wikipedia.org/wiki/PGP_word_list Wikipedia>.")
+    (license bsd-3)))
