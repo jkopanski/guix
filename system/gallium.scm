@@ -31,10 +31,10 @@
 
   (locale "pl_PL.utf8")
   (locale-definitions
-   (list (locale-definition (source "en_US")
-                            (name "en_US.utf8"))
-         (locale-definition (source "pl_PL")
-                            (name "pl_PL.utf8"))))
+   (list (locale-definition (source "pl_PL")
+                            (name "pl_PL.utf8"))
+         (locale-definition (source "en_US")
+                            (name "en_US.utf8"))))
 
   ;; Use the UEFI variant of GRUB with the EFI System
   ;; Partiftp/Scheme/monad-in-Scheme.htmltion mounted on /boot/efi.
@@ -74,52 +74,49 @@
   ;; Add a bunch of window managers; we can choose one at
   ;; the log-in screen with F1.
   (packages
-    (let ((useless-packages (guix-packages
-			      (linux iw net-tools)
-			      (zile zile)
-			      (nano nano))))
-      (append (guix-packages
-		(admin shadow)
-		(certs nss-certs)
-    (code the-silver-searcher)
-		(connman connman)
-		(curl curl)
-    (enlightenment enlightenment)
-    ;; pyxdg fails
-    ;; (enlightenment lekha)
-    (enlightenment terminology)
-		(fonts font-adobe-source-code-pro)
-		(fonts font-anonymous-pro)
-		(fonts font-awesome)
-		(fonts font-go)
-		(fonts font-iosevka)
-		(fonts font-inconsolata)
-    ;; Missing packages
-    ;; (lxqt lxqt-common)
-    ;; (lxqt lxqt-session)
-    (shells zsh)
-		(ssh openssh)
-    (tmux tmux)
-		(vpn openvpn)
-		(wget wget)
-		(wm xmobar)
-		(wm xmonad)
-		(version-control git)
-		(vim vim)
-    (xdisorg rxvt-unicode)
-		(xfce xfce))
-	      (remove (lambda (pkg)
-			(memq pkg useless-packages))
-		      %base-packages))))
- 
+   (let ((useless-packages (map specification->package
+                                '("iw"
+                                  "net-tools"
+                                  "zile"
+                                  "nano"))))
+      (append
+       (map specification->package
+            '("acpi"
+              "arandr"
+              "alsa-utils"
+              "font-adobe-source-code-pro"
+              "font-anonymous-pro"
+              "font-awesome"
+              "font-fira-mono"
+              "font-go"
+              "font-hack"
+              "font-iosevka"
+              "font-inconsolata"
+              "glibc-utf8-locales"
+              "le-certs"
+              "shadow"
+              "nss-certs"
+              "setxkbmap"
+              "vim"
+              "xbacklight"
+              "xcalib"
+              "xclip"
+              "xdg-utils"
+              "xkill"
+              "xmodmap"
+              "xrandr"
+              "xrdb"
+              "xsetroot"
+              "zsh")))
+      (remove (lambda (pkg)
+                (memq pkg useless-packages))
+              %base-packages)))
+
   ;; Use the "desktop" services, which include the X11
   ;; log-in service, networking with Wicd, and more.
   (services (cons* (console-keymap-service "pl2")
                    (extra-special-file "/usr/bin/env"
                                        (file-append coreutils "/bin/env"))
-;		   (service connman-service-type
-;		     (connman-configuration
-;		       (disable-vpn? #f)))
                    %desktop-services))
 
   ;; Allow resolution of '.local' host names with mDNS.
