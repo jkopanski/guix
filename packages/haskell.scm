@@ -3486,3 +3486,49 @@ pre-defined variants."
     (description
       "Translate between binary data and a human-readable collection of words. . The PGP Word List consists of two phonetic alphabets, each with one word per possible byte value. A string of bytes is translated with these alphabets, alternating between them at each byte. . The PGP words corresponding to the bytes @5B 1D CA 6E@ are \"erase breakaway spellbind headwaters\", for example. . For further information, see <http://en.wikipedia.org/wiki/PGP_word_list Wikipedia>.")
     (license bsd-3)))
+
+(define-public ghc-quickcheck-2.9
+  (package
+   (inherit ghc-quickcheck)
+   (name "ghc-quickcheck")
+   (version "2.9.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (string-append
+           "https://hackage.haskell.org/package/QuickCheck/QuickCheck-"
+           version
+           ".tar.gz"))
+     (sha256
+      (base32
+       "119np67qvx8hyp9vkg4gr2wv3lj3j6ay2vl4hxspkg43ymb1cp0m"))))
+   (inputs
+    `(("ghc-smigroups" ,ghc-semigroups)
+      ("ghc-tf-random" ,ghc-tf-random)))))
+
+(define-public ghc-test-invariant
+  (package
+    (name "ghc-test-invariant")
+    (version "0.4.5.0")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (string-append
+              "https://hackage.haskell.org/package/test-invariant/test-invariant-"
+              version
+              ".tar.gz"))
+        (sha256
+          (base32
+            "0ck3kk7pmj1679ddmrysx5j3y27619ar1b2pny45mskz3g6vyvrh"))))
+    (build-system haskell-build-system)
+    (inputs
+      `(("ghc-quickcheck" ,ghc-quickcheck)
+        ("ghc-tasty" ,ghc-tasty)
+        ("ghc-tasty-quickcheck" ,ghc-tasty-quickcheck)))
+    (home-page
+      "https://github.com/knupfer/test-invariant")
+    (synopsis
+      "Provide common invariants to be checked with QuickCheck")
+    (description
+      "test-invariant is a library for providing common invariants of functions as higher order polymorphic functions.  This reduces for a lot of cases the need for writing prop_ functions for QuickCheck. . >>> quickCheck $ idempotent (abs :: Int -> Int) >>> quickCheck $ involutory not >>> quickCheck $ not . involutory (+ (2 :: Int))")
+    (license bsd-3)))
