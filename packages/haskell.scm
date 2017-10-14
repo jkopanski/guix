@@ -2328,7 +2328,7 @@ pre-defined variants."
 (define-public ghc-hlint
   (package
     (name "ghc-hlint")
-    (version "2.0.9")
+    (version "1.9.35")
     (source
       (origin
         (method url-fetch)
@@ -2338,7 +2338,7 @@ pre-defined variants."
               ".tar.gz"))
         (sha256
           (base32
-            "1bd5nizx1dbzhrfcr9mgpjvg4b6f6z73jvslkbialp7g9pkr6a95"))))
+            "12ksgnlp14c9xkz6zzwnkivzs4ch0lv93h1fw4p8d83pvkd8jqjy"))))
     (build-system haskell-build-system)
     (inputs
       `(("ghc-unordered-containers"
