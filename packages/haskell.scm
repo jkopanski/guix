@@ -1,20 +1,91 @@
 (define-module (nat guix packages haskell)
+  #:use-module (guix)
   #:use-module (guix build-system haskell)
   #:use-module (guix download)
   #:use-module (guix licenses)
   #:use-module (guix packages)
-  #:use-module (gnu packages haskell))
+  #:use-module (gnu packages haskell)
+  #:export (package-with-ghc8
+            default-ghc8))
 
-;; (define-public haskell-project
-;;   (package
-;;    (name "haskell-project")
-;;    (varsion "0.1.0")
-;;    (source (local-file "./"))
-;;    (build-system haskell-build-system)
-;;    (home-page "https://jkopanski.github.com")
-;;    (synopsis "guix package project template")
-;;    (description "Please see README.md")
-;;    (license gpl3)))
+(define (default-ghc8)
+  "Return the default GHC 8 package."
+  (let ((haskell (resolve-interface '(gnu packages haskell))))
+    (module-ref haskell 'ghc-8)))
+
+(define* (package-with-explicit-ghc haskell old-prefix new-prefix
+                                       #:key variant-property)
+  "Return a procedure of one argument, P.  The procedure creates a package with
+the same fields as P, which is assumed to use HASKELL-BUILD-SYSTEM, such that
+it is compiled with HASKELL instead.  The inputs are changed recursively
+accordingly.  If the name of P starts with OLD-PREFIX, this is replaced by
+NEW-PREFIX; otherwise, NEW-PREFIX is prepended to the name.
+
+When VARIANT-PROPERTY is present, it is used as a key to search for
+pre-defined variants of this transformation recorded in the 'properties' field
+of packages.  The property value must be the promise of a package.  This is a
+convenient way for package writers to force the transformation to use
+pre-defined variants."
+  (define package-variant
+    (if variant-property
+        (lambda (package)
+          (assq-ref (package-properties package)
+                    variant-property))
+        (const #f)))
+
+  (define (transform p)
+    (cond
+     ;; If VARIANT-PROPERTY is present, use that.
+     ((package-variant p)
+      => force)
+
+     ;; Otherwise build the new package object graph.
+     ((eq? (package-build-system p) haskell-build-system)
+      (package
+        (inherit p)
+        (location (package-location p))
+        (name (let ((name (package-name p)))
+                (string-append new-prefix
+                               (if (string-prefix? old-prefix name)
+                                   (substring name
+                                              (string-length old-prefix))
+                                   name))))
+        (arguments
+         (let ((haskell (if (promise? haskell)
+                           (force haskell)
+                           haskell)))
+           (ensure-keyword-arguments (package-arguments p)
+                                     `(#:haskell ,haskell))))))
+     (else p)))
+
+  (define (cut? p)
+    (or (not (eq? (package-build-system p) haskell-build-system))
+        (package-variant p)))
+
+  (package-mapping transform cut?))
+
+(define package-with-ghc8
+  ;; Note: delay call to 'default-ghc8' until after the 'arguments' field
+  ;; of packages is accessed to avoid a circular dependency when evaluating
+  ;; the top-level of (gnu packages haskell).
+  (package-with-explicit-ghc (delay (default-ghc8))
+                                "ghc-" "ghc8-"
+                                #:variant-property 'ghc8-variant))
+
+(define-public haskell-project
+  (package
+    (name "haskell-project")
+    (version "0.1.0")
+    (source (local-file "./"))
+    (arguments `(#:haskell ,ghc-8))
+    (propagated-inputs
+     `(("ghc" ,ghc-8)
+       ("cabal-install" ,cabal-install)))
+    (build-system haskell-build-system)
+    (home-page "https://jkopanski.github.io")
+    (synopsis "guix environment template")
+    (description "Please see README.md")
+    (license gpl3)))
 
 (define-public ghc-stack
   (package
