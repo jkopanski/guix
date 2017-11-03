@@ -101,7 +101,7 @@
                (base32
                 "0kncb61kw3g8lf7hw663jwk92b04ap0wlg3mi2yj6m066gnpbg9i"))))
      (build-system go-build-system)
-     (propagated-inputs
+     (inputs
       `(("fuse" ,fuse)
         ("keybase" ,keybase)))
      (arguments
@@ -149,7 +149,7 @@
                (base32
                 "0kncb61kw3g8lf7hw663jwk92b04ap0wlg3mi2yj6m066gnpbg9i"))))
      (build-system go-build-system)
-     (propagated-inputs
+     (inputs
       `(("go-github-com-keybase-kbfs-kbfsfuse"
          ,go-github-com-keybase-kbfs-kbfsfuse)))
      (arguments
