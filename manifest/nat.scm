@@ -77,4 +77,8 @@
         "zathura"
         "zathura-pdf-poppler"
         "zsh"
+
+        "keybase"
+        "go-github-com-keybase-kbfs-kbfsfuse"
+        "go-github-com-keybase-kbfs-kbfsgit"
         )))

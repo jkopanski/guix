@@ -29,17 +29,17 @@
 (define-public keybase
   (package
     (name "keybase")
-    (version "1.0.33")
+    (version "1.0.36")
     (source
-    (origin
+     (origin
       (method url-fetch)
       (uri (string-append
             "https://github.com/keybase/client/archive/v"
             version
             ".tar.gz"))
       (sha256
-      (base32
-        "1q6vl07hxz5dbnr8wrv4iwsrza5zshqbxpgp0l1bzc4r51bms4y8"))))
+       (base32
+        "1yjib1axssfxm7c1y837zyydic1ja2fb6v14xwkipvp9l3bakffx"))))
     (build-system go-build-system)
     (arguments
     `(#:import-path "github.com/keybase/client/go/keybase"
@@ -51,7 +51,7 @@
           (lambda _
             ;; ERROR: In procedure string-append: Wrong-type (expected string)
             ;; (rename-file (string-append "src/github.com/keybase/client-" version)
-            (rename-file "src/github.com/keybase/client-1.0.33"
+            (rename-file "src/github.com/keybase/client-1.0.36"
                          "src/github.com/keybase/client")))
 
         (add-after 'setup-environment 'setup-bindir
@@ -86,7 +86,7 @@
     (license bsd-3)))
 
 (define-public go-github-com-keybase-kbfs-kbfsfuse
-  (let ((commit "2a14ea979c196f555282504de313c344f56b98e7")
+  (let ((commit "v1.0.36")
         (revision "0"))
     (package
      (name "go-github-com-keybase-kbfs-kbfsfuse")
@@ -99,7 +99,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0kncb61kw3g8lf7hw663jwk92b04ap0wlg3mi2yj6m066gnpbg9i"))))
+                "1wj118mblyq2060ixhn90h0n9fk1phfcwjviy44kbj2swlq6xpis"))))
      (build-system go-build-system)
      (inputs
       `(("fuse" ,fuse)
@@ -134,7 +134,7 @@
      (license bsd-3))))
 
 (define-public go-github-com-keybase-kbfs-kbfsgit
-  (let ((commit "2a14ea979c196f555282504de313c344f56b98e7")
+  (let ((commit "v1.0.36")
         (revision "0"))
     (package
      (name "go-github-com-keybase-kbfs-kbfsgit")
@@ -147,7 +147,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0kncb61kw3g8lf7hw663jwk92b04ap0wlg3mi2yj6m066gnpbg9i"))))
+                "1wj118mblyq2060ixhn90h0n9fk1phfcwjviy44kbj2swlq6xpis"))))
      (build-system go-build-system)
      (inputs
       `(("go-github-com-keybase-kbfs-kbfsfuse"
